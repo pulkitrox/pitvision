@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — PitVision AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="about">
+
+  <header class="nav" data-testid="main-nav">
+    <a class="nav__brand" href="index.html" data-testid="brand-logo">
+      <span class="brand__mark"></span>
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html" class="nav__link" data-testid="nav-home">Home</a>
+      <a href="predictor.html" class="nav__link" data-testid="nav-predictor">Predictor</a>
+      <a href="model.html" class="nav__link" data-testid="nav-model">Model</a>
+      <a href="about.html" class="nav__link is-active" data-testid="nav-about">About</a>
+    </nav>
+    <a href="predictor.html" class="btn btn--ghost nav__cta" data-testid="nav-launch"><span>Launch</span><i class="i-arrow"></i></a>
+    <button class="nav__burger" data-testid="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="pred about">
+    <section class="pred__head">
+      <div>
+        <div class="eyebrow">— THE PROJECT</div>
+        <h1 class="page__title">A dissertation-grade<br/><span class="accent">strategy engine.</span></h1>
+        <p class="page__sub">PitVision AI predicts whether a Formula 1 driver should pit on the next lap using a machine learning stacking ensemble. It learns from years of lap-level race telemetry to detect the precise moment when tyre degradation, lap-time delta and field position make a pit stop the optimal call.</p>
+      </div>
+    </section>
+
+    <!-- OBJECTIVES -->
+    <section class="card about__card" data-testid="objectives-card">
+      <div class="card__head"><div><div class="eyebrow">— OBJECTIVES</div><h2>Project objectives</h2></div></div>
+      <ol class="obj">
+        <li><span class="obj__n">01</span><div><h4>Quantify pit decisions</h4><p>Convert the qualitative intuition of race engineers into a calibrated binary classification problem.</p></div></li>
+        <li><span class="obj__n">02</span><div><h4>Handle severe class imbalance</h4><p>Roughly 3% of laps end in a pit stop. The model is optimised for recall to avoid missing pit-windows.</p></div></li>
+        <li><span class="obj__n">03</span><div><h4>Be explainable</h4><p>Feature importance &amp; meta-learner coefficients make the recommendation auditable for engineers.</p></div></li>
+        <li><span class="obj__n">04</span><div><h4>Be deployment ready</h4><p>Designed to plug into a Flask backend serving JSON predictions for live strategy software.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section class="card about__card" data-testid="methodology-card">
+      <div class="card__head"><div><div class="eyebrow">— METHODOLOGY</div><h2>How it works</h2></div></div>
+      <div class="meth">
+        <div class="meth__col">
+          <h4>Feature Engineering</h4>
+          <p>Forty-three engineered features capture lap-time evolution, rolling pace statistics, position trajectory, degradation slope and stint progress for every lap.</p>
+        </div>
+        <div class="meth__col">
+          <h4>Ensemble Learning</h4>
+          <p>Three independent base learners — Random Forest, XGBoost and LightGBM — are trained on out-of-fold splits and combined via stacking.</p>
+        </div>
+        <div class="meth__col">
+          <h4>Hyperparameter Tuning</h4>
+          <p>Each base learner is tuned with Optuna over 100 trials, optimising PR-AUC on the 2024 validation season.</p>
+        </div>
+        <div class="meth__col">
+          <h4>Logistic Regression Meta-Learner</h4>
+          <p>A logistic regression meta-classifier learns the optimal blend of base learner probabilities for the final pit decision.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="card about__card" data-testid="stack-card">
+      <div class="card__head"><div><div class="eyebrow">— STACK</div><h2>Algorithms</h2></div></div>
+      <div class="stack__grid">
+        <div class="algo"><div class="algo__t">Random Forest</div><p>Robust baseline ensemble of decision trees with bagging. Captures non-linear interactions between stint length and degradation.</p></div>
+        <div class="algo"><div class="algo__t">XGBoost</div><p>Gradient boosted trees with regularisation. Excels at handling the imbalanced positive class.</p></div>
+        <div class="algo"><div class="algo__t">LightGBM</div><p>Histogram-based gradient boosting. Fast on the wide feature matrix and a strong recall driver.</p></div>
+        <div class="algo algo--meta"><div class="algo__t">Logistic Regression</div><p>Calibrated meta-learner producing the final pit probability from base-learner outputs.</p></div>
+      </div>
+    </section>
+
+    <!-- API -->
+    <section class="card about__card api" data-testid="api-card">
+      <div class="card__head"><div><div class="eyebrow">— BACKEND</div><h2>REST API contract</h2></div></div>
+      <p class="muted">The dashboard is wired to a Flask backend through a single endpoint.</p>
+      <div class="api__row">
+        <div class="api__panel">
+          <div class="api__head"><span class="api__method">POST</span><span class="api__url">/predict</span></div>
+          <pre class="code"><code>{
+  "driver": "VER",
+  "race": "Monza",
+  "compound": "MEDIUM",
+  "lapNumber": 22,
+  "position": 6,
+  "tyreLife": 18,
+  "lapTime": 89.341,
+  "lapTimeDelta": 0.412,
+  "cumulativeDegradation": 2.85,
+  "raceProgress": 0.42,
+  "...": "43 engineered features"
+}</code></pre>
+        </div>
+        <div class="api__panel">
+          <div class="api__head"><span class="api__method api__method--ok">200</span><span class="api__url">application/json</span></div>
+          <pre class="code"><code>{
+  "prediction": "Pit Next Lap",
+  "probability": 0.928,
+  "confidence": 92.8
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div class="foot__l">
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+      <span class="foot__tag">Machine Learning Based Formula 1 Pit Stop Prediction</span>
+    </div>
+    <div class="foot__r"><span>© 2026 PitVision AI</span></div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

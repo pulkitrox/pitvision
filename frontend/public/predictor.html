@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predictor — PitVision AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="predictor">
+
+  <header class="nav" data-testid="main-nav">
+    <a class="nav__brand" href="index.html" data-testid="brand-logo">
+      <span class="brand__mark"></span>
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html" class="nav__link" data-testid="nav-home">Home</a>
+      <a href="predictor.html" class="nav__link is-active" data-testid="nav-predictor">Predictor</a>
+      <a href="model.html" class="nav__link" data-testid="nav-model">Model</a>
+      <a href="about.html" class="nav__link" data-testid="nav-about">About</a>
+    </nav>
+    <span class="nav__status" data-testid="api-status">
+      <span class="dot pulse"></span>STACK ENSEMBLE · LIVE
+    </span>
+    <button class="nav__burger" data-testid="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="pred">
+    <section class="pred__head">
+      <div>
+        <div class="eyebrow">— STRATEGY ENGINE</div>
+        <h1 class="page__title">Pit Stop <span class="accent">Predictor</span></h1>
+        <p class="page__sub">Feed the model lap telemetry and feature engineering inputs. The stacking ensemble returns a binary pit recommendation with calibrated confidence.</p>
+      </div>
+      <div class="pred__chips">
+        <span class="chip"><span class="dot"></span>43 features</span>
+        <span class="chip"><span class="dot"></span>Stacking ensemble</span>
+        <span class="chip"><span class="dot"></span>Logistic meta-learner</span>
+      </div>
+    </section>
+
+    <div class="pred__layout">
+
+      <!-- ============== INPUT FORM ============== -->
+      <form class="card form" id="predictForm" data-testid="predict-form" autocomplete="off">
+        <div class="card__head">
+          <div>
+            <h2>Input parameters</h2>
+            <p class="muted">Lap-level telemetry &amp; engineered features.</p>
+          </div>
+          <button type="button" class="btn btn--ghost btn--sm" id="randomFillBtn" data-testid="random-fill-btn">
+            <span>Sample lap</span>
+          </button>
+        </div>
+
+        <!-- CORE -->
+        <div class="form__grid">
+          <div class="field">
+            <label for="driver">Driver</label>
+            <select id="driver" name="driver" data-testid="input-driver"></select>
+          </div>
+          <div class="field">
+            <label for="race">Race</label>
+            <select id="race" name="race" data-testid="input-race"></select>
+          </div>
+          <div class="field">
+            <label for="compound">Compound</label>
+            <select id="compound" name="compound" data-testid="input-compound"></select>
+          </div>
+
+          <div class="field">
+            <label for="lapNumber">Lap Number</label>
+            <input type="number" id="lapNumber" name="lapNumber" min="1" max="78" value="22" data-testid="input-lapNumber">
+          </div>
+          <div class="field">
+            <label for="position">Current Position</label>
+            <input type="number" id="position" name="position" min="1" max="20" value="6" data-testid="input-position">
+          </div>
+          <div class="field">
+            <label for="stint">Current Stint</label>
+            <input type="number" id="stint" name="stint" min="1" max="6" value="1" data-testid="input-stint">
+          </div>
+
+          <div class="field">
+            <label for="tyreLife">Tyre Life (laps)</label>
+            <input type="number" id="tyreLife" name="tyreLife" min="0" max="60" value="18" data-testid="input-tyreLife">
+          </div>
+          <div class="field">
+            <label for="lapTime">Lap Time (s)</label>
+            <input type="number" id="lapTime" name="lapTime" step="0.001" value="89.341" data-testid="input-lapTime">
+          </div>
+          <div class="field">
+            <label for="lapDelta">Lap Time Delta (s)</label>
+            <input type="number" id="lapDelta" name="lapDelta" step="0.001" value="0.412" data-testid="input-lapDelta">
+          </div>
+
+          <div class="field">
+            <label for="cumDeg">Cumulative Degradation (s)</label>
+            <input type="number" id="cumDeg" name="cumDeg" step="0.01" value="2.85" data-testid="input-cumDeg">
+          </div>
+          <div class="field">
+            <label for="posChange">Position Change</label>
+            <input type="number" id="posChange" name="posChange" value="-1" data-testid="input-posChange">
+          </div>
+          <div class="field field--full">
+            <label for="raceProgress">Race Progress <span class="muted" id="raceProgressVal">42%</span></label>
+            <input type="range" id="raceProgress" name="raceProgress" min="0" max="100" value="42" data-testid="input-raceProgress" class="slider">
+          </div>
+        </div>
+
+        <!-- LAG FEATURES -->
+        <details class="collapse" open>
+          <summary data-testid="lag-toggle">
+            <span class="collapse__t">Lag Features</span>
+            <span class="collapse__hint">8 inputs</span>
+            <span class="collapse__icon"></span>
+          </summary>
+          <div class="form__grid">
+            <div class="field"><label>LapTime Lag1</label><input type="number" step="0.001" name="lapTimeLag1" value="89.105" data-testid="lag-lt1"></div>
+            <div class="field"><label>LapTime Lag2</label><input type="number" step="0.001" name="lapTimeLag2" value="88.920" data-testid="lag-lt2"></div>
+            <div class="field"><label>LapTime Lag3</label><input type="number" step="0.001" name="lapTimeLag3" value="88.751" data-testid="lag-lt3"></div>
+            <div class="field"><label>LapDelta Lag1</label><input type="number" step="0.001" name="lapDeltaLag1" value="0.221" data-testid="lag-ld1"></div>
+            <div class="field"><label>LapDelta Lag2</label><input type="number" step="0.001" name="lapDeltaLag2" value="0.058" data-testid="lag-ld2"></div>
+            <div class="field"><label>LapDelta Lag3</label><input type="number" step="0.001" name="lapDeltaLag3" value="-0.110" data-testid="lag-ld3"></div>
+            <div class="field"><label>Position Lag1</label><input type="number" name="positionLag1" value="6" data-testid="lag-p1"></div>
+            <div class="field"><label>Position Lag2</label><input type="number" name="positionLag2" value="7" data-testid="lag-p2"></div>
+          </div>
+        </details>
+
+        <!-- ROLLING FEATURES -->
+        <details class="collapse">
+          <summary data-testid="rolling-toggle">
+            <span class="collapse__t">Rolling Features</span>
+            <span class="collapse__hint">6 inputs</span>
+            <span class="collapse__icon"></span>
+          </summary>
+          <div class="form__grid">
+            <div class="field"><label>Rolling Avg Lap Time 3</label><input type="number" step="0.001" name="rollAvgLT3" value="89.005" data-testid="roll-avglt3"></div>
+            <div class="field"><label>Rolling Avg Lap Time 5</label><input type="number" step="0.001" name="rollAvgLT5" value="88.870" data-testid="roll-avglt5"></div>
+            <div class="field"><label>Rolling Std Lap Time 3</label><input type="number" step="0.001" name="rollStdLT3" value="0.198" data-testid="roll-stdlt3"></div>
+            <div class="field"><label>Rolling Std Lap Time 5</label><input type="number" step="0.001" name="rollStdLT5" value="0.232" data-testid="roll-stdlt5"></div>
+            <div class="field"><label>Rolling Avg Lap Delta 3</label><input type="number" step="0.001" name="rollAvgLD3" value="0.056" data-testid="roll-avgld3"></div>
+            <div class="field"><label>Rolling Avg Lap Delta 5</label><input type="number" step="0.001" name="rollAvgLD5" value="-0.012" data-testid="roll-avgld5"></div>
+          </div>
+        </details>
+
+        <!-- TREND FEATURES -->
+        <details class="collapse">
+          <summary data-testid="trend-toggle">
+            <span class="collapse__t">Trend Features</span>
+            <span class="collapse__hint">4 inputs</span>
+            <span class="collapse__icon"></span>
+          </summary>
+          <div class="form__grid">
+            <div class="field"><label>Degradation Slope</label><input type="number" step="0.001" name="degSlope" value="0.094" data-testid="trend-degSlope"></div>
+            <div class="field"><label>Delta Acceleration</label><input type="number" step="0.001" name="deltaAccel" value="0.041" data-testid="trend-deltaAccel"></div>
+            <div class="field"><label>Position Trend</label><input type="number" step="0.001" name="posTrend" value="-0.5" data-testid="trend-posTrend"></div>
+            <div class="field"><label>Relative Lap Time</label><input type="number" step="0.001" name="relLapTime" value="0.038" data-testid="trend-relLapTime"></div>
+          </div>
+        </details>
+
+        <button type="submit" class="btn btn--primary btn--xl btn--block" id="predictBtn" data-testid="predict-btn">
+          <span class="btn__label">Predict Pit Decision</span>
+          <span class="btn__spinner" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <!-- ============== RESULT PANEL ============== -->
+      <aside class="result" data-testid="result-panel">
+
+        <div class="card result__card" id="resultCard">
+          <div class="card__head">
+            <div>
+              <div class="eyebrow">— DECISION</div>
+              <h2>Strategy Output</h2>
+            </div>
+            <span class="chip chip--ghost" id="latencyChip" data-testid="result-latency">— ms</span>
+          </div>
+
+          <div class="result__empty" id="resultEmpty" data-testid="result-empty">
+            <div class="empty__icon"></div>
+            <p>Run a prediction to populate the decision panel.</p>
+          </div>
+
+          <div class="result__body" id="resultBody" hidden>
+            <div class="result__badge" id="resultBadge" data-testid="result-badge">
+              <span class="badge__label">PIT NEXT LAP</span>
+            </div>
+
+            <div class="result__metrics">
+              <div class="rmetric">
+                <div class="rmetric__lbl">Prediction</div>
+                <div class="rmetric__val" id="rPrediction" data-testid="result-prediction">—</div>
+              </div>
+              <div class="rmetric">
+                <div class="rmetric__lbl">Confidence</div>
+                <div class="rmetric__val accent" id="rConfidence" data-testid="result-confidence">—</div>
+              </div>
+              <div class="rmetric">
+                <div class="rmetric__lbl">Probability</div>
+                <div class="rmetric__val" id="rProbability" data-testid="result-probability">—</div>
+              </div>
+            </div>
+
+            <div class="result__viz">
+              <!-- CIRCULAR CONFIDENCE -->
+              <div class="circ" data-testid="confidence-ring">
+                <svg viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="52" class="circ__bg"/>
+                  <circle cx="60" cy="60" r="52" class="circ__fg" id="circFg" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+                </svg>
+                <div class="circ__center">
+                  <div class="circ__num" id="circNum">0%</div>
+                  <div class="circ__lbl">CONFIDENCE</div>
+                </div>
+              </div>
+
+              <!-- TRAFFIC LIGHT -->
+              <div class="lights" data-testid="traffic-lights">
+                <div class="light light--green" id="lightG"></div>
+                <div class="light light--yellow" id="lightY"></div>
+                <div class="light light--red" id="lightR"></div>
+              </div>
+            </div>
+
+            <!-- GAUGE -->
+            <div class="gauge" data-testid="probability-gauge">
+              <svg viewBox="0 0 220 130">
+                <defs>
+                  <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#16a34a"/>
+                    <stop offset="50%" stop-color="#facc15"/>
+                    <stop offset="100%" stop-color="#E10600"/>
+                  </linearGradient>
+                </defs>
+                <path d="M20,110 A90,90 0 0 1 200,110" stroke="rgba(255,255,255,0.08)" stroke-width="14" fill="none" stroke-linecap="round"/>
+                <path d="M20,110 A90,90 0 0 1 200,110" stroke="url(#gaugeGrad)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="282.7" id="gaugeArc"/>
+                <g id="gaugeNeedle" transform="rotate(-90 110 110)">
+                  <line x1="110" y1="110" x2="110" y2="35" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="110" cy="110" r="7" fill="#E10600"/>
+                </g>
+                <text x="22" y="128" fill="#9aa3ad" font-size="10" font-family="JetBrains Mono">0%</text>
+                <text x="100" y="20" fill="#9aa3ad" font-size="10" font-family="JetBrains Mono">50%</text>
+                <text x="186" y="128" fill="#9aa3ad" font-size="10" font-family="JetBrains Mono">100%</text>
+              </svg>
+              <div class="gauge__lbl">Pit Probability</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TELEMETRY MINI -->
+        <div class="card mini" data-testid="telemetry-card">
+          <div class="mini__row"><span>Driver</span><span id="mDriver">—</span></div>
+          <div class="mini__row"><span>Race</span><span id="mRace">—</span></div>
+          <div class="mini__row"><span>Compound</span><span id="mCompound">—</span></div>
+          <div class="mini__row"><span>Lap</span><span id="mLap">—</span></div>
+          <div class="mini__row"><span>Tyre Life</span><span id="mTyre">—</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ============== HISTORY + SPARKLINE ============== -->
+    <section class="card history" id="historyCard" data-testid="history-card">
+      <div class="card__head">
+        <div>
+          <div class="eyebrow">— STRATEGY TIMELINE</div>
+          <h2>Pit-probability over your last laps</h2>
+          <p class="muted">Up to 12 predictions persist in this browser. Watch the curve approach the red threshold — that's your pit window.</p>
+        </div>
+        <button type="button" class="btn btn--ghost btn--sm" id="clearHistoryBtn" data-testid="clear-history-btn">
+          <span>Clear</span>
+        </button>
+      </div>
+
+      <div class="history__empty" id="historyEmpty" data-testid="history-empty">
+        <p>No predictions yet — run one above and the sparkline will populate.</p>
+      </div>
+
+      <div class="history__content" id="historyContent" hidden>
+        <div class="history__stats" id="historyStats" data-testid="history-stats"></div>
+        <div class="history__chart" data-testid="history-sparkline">
+          <svg id="sparkline" preserveAspectRatio="none" aria-label="Pit probability sparkline"></svg>
+        </div>
+        <div class="history__table" data-testid="history-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th><th>Driver</th><th>Race</th><th>Lap</th>
+                <th>Compound</th><th>Tyre</th><th>P(pit)</th><th>Call</th>
+              </tr>
+            </thead>
+            <tbody id="historyTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div class="foot__l">
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+      <span class="foot__tag">Live ML predictions · stacking ensemble at POST /api/predict</span>
+    </div>
+    <div class="foot__r">
+      <span>© 2026 PitVision AI</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

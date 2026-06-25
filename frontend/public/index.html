@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PitVision AI — Formula 1 Pit Stop Prediction</title>
+  <meta name="description" content="Machine Learning based Formula 1 Pit Stop Prediction dashboard. Predict whether a driver should pit on the next lap using a stacking ensemble model." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="home">
+  <!-- ============== NAV ============== -->
+  <header class="nav" data-testid="main-nav">
+    <a class="nav__brand" href="index.html" data-testid="brand-logo">
+      <span class="brand__mark"></span>
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html" class="nav__link is-active" data-testid="nav-home">Home</a>
+      <a href="predictor.html" class="nav__link" data-testid="nav-predictor">Predictor</a>
+      <a href="model.html" class="nav__link" data-testid="nav-model">Model</a>
+      <a href="about.html" class="nav__link" data-testid="nav-about">About</a>
+    </nav>
+    <a href="predictor.html" class="btn btn--ghost nav__cta" data-testid="nav-launch">
+      <span>Launch</span><i class="i-arrow"></i>
+    </a>
+    <button class="nav__burger" data-testid="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section class="hero" data-testid="hero-section">
+    <div class="hero__bg">
+      <svg class="hero__track" viewBox="0 0 1440 800" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="trackGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#E10600" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#E10600" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M-50,420 C150,200 350,650 600,500 C820,370 980,720 1200,540 C1360,420 1480,560 1560,440"
+              fill="none" stroke="url(#trackGrad)" stroke-width="2" class="hero__track-line"/>
+        <path d="M-50,460 C160,260 360,690 610,540 C830,410 990,760 1210,580 C1370,460 1490,600 1570,480"
+              fill="none" stroke="#E10600" stroke-width="1" stroke-dasharray="3 8" class="hero__track-dash"/>
+      </svg>
+      <div class="hero__flag" aria-hidden="true"></div>
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="hero__particles" id="particles" aria-hidden="true"></div>
+    </div>
+
+    <div class="hero__content">
+      <div class="hero__tag">
+        <span class="dot pulse"></span>
+        <span>LIVE · 2026 STRATEGY ENGINE</span>
+      </div>
+      <h1 class="hero__title" data-testid="hero-title">
+        AI Powered<br/>
+        Formula 1<br/>
+        <span class="accent">Strategy Prediction</span>
+      </h1>
+      <p class="hero__subtitle">
+        Predict whether a Formula 1 driver should pit on the next lap using a machine learning stacking ensemble trained on historical race data.
+      </p>
+      <div class="hero__cta">
+        <a href="predictor.html" class="btn btn--primary" data-testid="cta-launch-predictor">
+          <span>Launch Predictor</span>
+          <i class="i-arrow"></i>
+        </a>
+        <a href="#features" class="btn btn--ghost" data-testid="cta-learn-more">
+          <span>Learn More</span>
+        </a>
+      </div>
+
+      <div class="hero__stats">
+        <div class="stat" data-testid="stat-accuracy">
+          <div class="stat__val" data-counter="97.0" data-suffix="%">0%</div>
+          <div class="stat__lbl">Accuracy</div>
+        </div>
+        <div class="stat" data-testid="stat-rocauc">
+          <div class="stat__val" data-counter="98.45" data-suffix="%">0%</div>
+          <div class="stat__lbl">ROC-AUC</div>
+        </div>
+        <div class="stat" data-testid="stat-recall">
+          <div class="stat__val" data-counter="87.7" data-suffix="%">0%</div>
+          <div class="stat__lbl">Recall</div>
+        </div>
+        <div class="stat" data-testid="stat-laps">
+          <div class="stat__val" data-counter="24627" data-suffix="">0</div>
+          <div class="stat__lbl">Laps trained</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FEATURES ============== -->
+  <section id="features" class="features" data-testid="features-section">
+    <div class="section__head">
+      <div class="eyebrow">— THE PLATFORM</div>
+      <h2 class="section__title">Built for race engineers,<br/><span class="accent">strategists, & analysts.</span></h2>
+    </div>
+
+    <div class="features__grid">
+      <article class="feat">
+        <div class="feat__num">01</div>
+        <h3>Stacking Ensemble</h3>
+        <p>Random Forest, XGBoost & LightGBM unified through a Logistic Regression meta-learner for maximum recall.</p>
+        <ul class="feat__chips">
+          <li>Random Forest</li><li>XGBoost</li><li>LightGBM</li>
+        </ul>
+      </article>
+
+      <article class="feat feat--accent">
+        <div class="feat__num">02</div>
+        <h3>43 Engineered Features</h3>
+        <p>Lag, rolling and trend features capture degradation slope, lap delta acceleration and position trajectories.</p>
+        <ul class="feat__chips">
+          <li>Lag</li><li>Rolling</li><li>Trend</li>
+        </ul>
+      </article>
+
+      <article class="feat">
+        <div class="feat__num">03</div>
+        <h3>Live Telemetry Ready</h3>
+        <p>Designed to plug into a Flask backend via <code>POST /predict</code>. Returns prediction, confidence & probability in milliseconds.</p>
+        <ul class="feat__chips">
+          <li>REST</li><li>JSON</li><li>Realtime</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============== STRATEGY STRIP ============== -->
+  <section class="strip" data-testid="strip-section">
+    <div class="strip__row">
+      <span>PIT WINDOW</span><span>UNDERCUT</span><span>OVERCUT</span><span>VSC</span><span>SAFETY CAR</span><span>DRS</span><span>DEGRADATION</span><span>STINT LENGTH</span><span>COMPOUND DELTA</span><span>TYRE LIFE</span><span>PIT WINDOW</span><span>UNDERCUT</span><span>OVERCUT</span>
+    </div>
+  </section>
+
+  <!-- ============== WORKFLOW ============== -->
+  <section class="workflow" data-testid="workflow-section">
+    <div class="section__head">
+      <div class="eyebrow">— METHODOLOGY</div>
+      <h2 class="section__title">From telemetry<br/>to <span class="accent">decisive call.</span></h2>
+    </div>
+    <div class="workflow__steps">
+      <div class="step">
+        <div class="step__idx">01</div>
+        <h4>Ingest</h4>
+        <p>FastF1 lap, tyre & sector telemetry across 2022 — 2025.</p>
+      </div>
+      <div class="step__arrow"></div>
+      <div class="step">
+        <div class="step__idx">02</div>
+        <h4>Engineer</h4>
+        <p>Compute lag, rolling, trend and relative pace features.</p>
+      </div>
+      <div class="step__arrow"></div>
+      <div class="step">
+        <div class="step__idx">03</div>
+        <h4>Stack</h4>
+        <p>Three base learners feed a Logistic Regression meta-model.</p>
+      </div>
+      <div class="step__arrow"></div>
+      <div class="step">
+        <div class="step__idx">04</div>
+        <h4>Predict</h4>
+        <p>Output probability, confidence and a binary pit decision.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CTA ============== -->
+  <section class="cta" data-testid="cta-section">
+    <div class="cta__card">
+      <div>
+        <div class="eyebrow">— TRY IT NOW</div>
+        <h2>Make the call before the<br/>pit wall does.</h2>
+      </div>
+      <a href="predictor.html" class="btn btn--primary btn--lg" data-testid="cta-bottom-launch">
+        <span>Open Predictor</span><i class="i-arrow"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer class="foot">
+    <div class="foot__l">
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+      <span class="foot__tag">Machine Learning Based Formula 1 Pit Stop Prediction</span>
+    </div>
+    <div class="foot__r">
+      <span>© 2026 PitVision AI</span>
+      <span>·</span>
+      <span>Dissertation research project</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

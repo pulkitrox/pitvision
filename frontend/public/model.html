@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model — PitVision AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="model">
+
+  <header class="nav" data-testid="main-nav">
+    <a class="nav__brand" href="index.html" data-testid="brand-logo">
+      <span class="brand__mark"></span>
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html" class="nav__link" data-testid="nav-home">Home</a>
+      <a href="predictor.html" class="nav__link" data-testid="nav-predictor">Predictor</a>
+      <a href="model.html" class="nav__link is-active" data-testid="nav-model">Model</a>
+      <a href="about.html" class="nav__link" data-testid="nav-about">About</a>
+    </nav>
+    <a href="predictor.html" class="btn btn--ghost nav__cta" data-testid="nav-launch"><span>Launch</span><i class="i-arrow"></i></a>
+    <button class="nav__burger" data-testid="nav-burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main class="pred">
+    <section class="pred__head">
+      <div>
+        <div class="eyebrow">— MODEL CARD</div>
+        <h1 class="page__title">Stacking <span class="accent">Ensemble</span></h1>
+        <p class="page__sub">A heterogeneous stacking architecture combining three gradient-based learners with a logistic regression meta-classifier. Tuned on 24,627 race laps from the 2022-2025 Formula 1 seasons.</p>
+      </div>
+    </section>
+
+    <!-- ============== PIPELINE ============== -->
+    <section class="card pipe" data-testid="pipeline-section">
+      <div class="card__head">
+        <div><div class="eyebrow">— PIPELINE</div><h2>Machine Learning Pipeline</h2></div>
+      </div>
+      <div class="pipe__flow">
+        <div class="pipe__stage">
+          <span class="pipe__step">01</span>
+          <h4>Feature<br/>Engineering</h4>
+          <p>Lag / Rolling / Trend</p>
+        </div>
+        <div class="pipe__line"></div>
+        <div class="pipe__stage">
+          <span class="pipe__step">02</span>
+          <h4>Hyperparameter<br/>Tuning</h4>
+          <p>Optuna · 100 trials</p>
+        </div>
+        <div class="pipe__line"></div>
+        <div class="pipe__stage pipe__fork">
+          <div class="fork__node"><span class="pipe__step">03a</span><h4>Random Forest</h4></div>
+          <div class="fork__node"><span class="pipe__step">03b</span><h4>XGBoost</h4></div>
+          <div class="fork__node"><span class="pipe__step">03c</span><h4>LightGBM</h4></div>
+        </div>
+        <div class="pipe__line"></div>
+        <div class="pipe__stage">
+          <span class="pipe__step">04</span>
+          <h4>Stacking</h4>
+          <p>Out-of-fold features</p>
+        </div>
+        <div class="pipe__line"></div>
+        <div class="pipe__stage pipe__final">
+          <span class="pipe__step">05</span>
+          <h4>Logistic<br/>Regression</h4>
+          <p>Meta learner</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== DATASET ============== -->
+    <section class="data-grid" data-testid="dataset-section">
+      <div class="card data">
+        <div class="data__icon" data-color="green"></div>
+        <div class="data__lbl">TRAINING</div>
+        <div class="data__yrs">2022 — 2023</div>
+        <div class="data__meta"><span>~13,800 laps</span><span>43 features</span></div>
+      </div>
+      <div class="card data">
+        <div class="data__icon" data-color="yellow"></div>
+        <div class="data__lbl">VALIDATION</div>
+        <div class="data__yrs">2024</div>
+        <div class="data__meta"><span>~5,400 laps</span><span>Hyperparameter tuning</span></div>
+      </div>
+      <div class="card data">
+        <div class="data__icon" data-color="red"></div>
+        <div class="data__lbl">TESTING</div>
+        <div class="data__yrs">2025</div>
+        <div class="data__meta"><span>~5,400 laps</span><span>Held-out evaluation</span></div>
+      </div>
+    </section>
+
+    <!-- ============== METRICS ============== -->
+    <section class="metrics" data-testid="metrics-section">
+      <h2 class="section__title section__title--sm">Evaluation Metrics</h2>
+      <div class="metrics__grid">
+        <div class="met"><div class="met__lbl">Accuracy</div><div class="met__val" data-counter="97.0" data-suffix="%">0%</div></div>
+        <div class="met"><div class="met__lbl">Precision</div><div class="met__val" data-counter="48.5" data-suffix="%">0%</div></div>
+        <div class="met"><div class="met__lbl">Recall</div><div class="met__val" data-counter="87.7" data-suffix="%">0%</div></div>
+        <div class="met"><div class="met__lbl">F1 Score</div><div class="met__val" data-counter="62.5" data-suffix="%">0%</div></div>
+        <div class="met met--hero"><div class="met__lbl">ROC-AUC</div><div class="met__val" data-counter="98.45" data-suffix="%">0%</div></div>
+        <div class="met met--hero"><div class="met__lbl">PR-AUC</div><div class="met__val" data-counter="82.75" data-suffix="%">0%</div></div>
+      </div>
+    </section>
+
+    <!-- ============== CHARTS ============== -->
+    <section class="charts" data-testid="charts-section">
+      <div class="card chart-card">
+        <div class="card__head"><div><div class="eyebrow">— BENCHMARK</div><h3>Model Comparison</h3></div></div>
+        <canvas id="chartCompare" height="260"></canvas>
+      </div>
+
+      <div class="card chart-card">
+        <div class="card__head"><div><div class="eyebrow">— DRIVERS</div><h3>Top Feature Importances</h3></div></div>
+        <canvas id="chartFeats" height="260"></canvas>
+      </div>
+
+      <div class="card chart-card">
+        <div class="card__head"><div><div class="eyebrow">— OUTPUT</div><h3>Prediction Probability</h3></div></div>
+        <canvas id="chartDonut" height="260"></canvas>
+      </div>
+
+      <div class="card chart-card">
+        <div class="card__head"><div><div class="eyebrow">— ERRORS</div><h3>Confusion Matrix</h3></div></div>
+        <div class="cm" data-testid="confusion-matrix">
+          <div class="cm__axis cm__axis--y"><span>Actual</span></div>
+          <div class="cm__grid">
+            <div></div>
+            <div class="cm__lbl">Pred: STAY</div>
+            <div class="cm__lbl">Pred: PIT</div>
+            <div class="cm__lbl cm__lbl--row">Actual: STAY</div>
+            <div class="cm__cell cm__cell--tn"><div class="cm__num">23,277</div><div class="cm__tag">TN</div></div>
+            <div class="cm__cell cm__cell--fp"><div class="cm__num">651</div><div class="cm__tag">FP</div></div>
+            <div class="cm__lbl cm__lbl--row">Actual: PIT</div>
+            <div class="cm__cell cm__cell--fn"><div class="cm__num">86</div><div class="cm__tag">FN</div></div>
+            <div class="cm__cell cm__cell--tp"><div class="cm__num">613</div><div class="cm__tag">TP</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot__l">
+      <span class="brand__text">PitVision<span class="brand__ai">AI</span></span>
+      <span class="foot__tag">Stacking ensemble · 43 features · 2022-2025</span>
+    </div>
+    <div class="foot__r"><span>© 2026 PitVision AI</span></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+  <script src="charts.js"></script>
+</body>
+</html>
